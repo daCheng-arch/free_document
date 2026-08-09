@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 交付检查表</title>
+<style>
+  :root{
+    --bg:#0B1020; --card:#121A33; --card2:#0E1730; --line:#26345E;
+    --txt:#EAF0FF; --mut:#9AA7C7; --acc:#5B8CFF; --acc2:#2BD9E4;
+    --grn:#3FE0A0; --gold:#F5C451; --red:#FF6B81;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:'PingFang SC','Microsoft YaHei','Hiragino Sans GB',sans-serif;
+    line-height:1.6;padding:32px 20px 60px}
+  .wrap{max-width:880px;margin:0 auto}
+  header h1{font-size:30px;margin:0 0 6px;
+    background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  header p{margin:0;color:var(--mut);font-size:14px}
+  .usage{margin:14px 0 22px;padding:12px 16px;border:1px dashed var(--line);border-radius:12px;color:var(--mut);font-size:13px}
+  .quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .quick span{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px}
+  .card h2{display:flex;align-items:center;gap:10px;font-size:18px;margin:0 0 4px}
+  .card h2 .n{width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--acc),var(--acc2));color:#06101f;font-weight:800;font-size:14px}
+  .why{color:var(--mut);font-size:13px;margin:0 0 12px}
+  ul{list-style:none;margin:0;padding:0}
+  li{display:flex;gap:10px;padding:6px 0;font-size:14.5px;align-items:flex-start}
+  li input{margin-top:5px;width:16px;height:16px;accent-color:var(--acc2);flex:0 0 auto}
+  .self{margin-top:12px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mut)}
+  .self select{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:13px}
+  .must{border-color:#3a2030}
+  .must h2 .n{background:linear-gradient(135deg,var(--gold),#F0A93C);color:#1a1206}
+  .verdict{position:sticky;bottom:0;margin-top:8px;background:var(--card2);border:1px solid var(--line);
+    border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .verdict .v{font-size:16px;font-weight:700}
+  .verdict .c{color:var(--mut);font-size:13px}
+  button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#06101f;border:0;border-radius:10px;
+    padding:9px 16px;font-weight:700;cursor:pointer;font-size:14px}
+  footer{color:var(--mut);font-size:12px;text-align:center;margin-top:22px}
+  @media print{
+    body{background:#fff;color:#111}
+    .card,header h1,.verdict,.usage{box-shadow:none}
+    .card{background:#fff;border:1px solid #ccc;break-inside:avoid}
+    header h1{color:#111;-webkit-text-fill-color:#111;background:none}
+    .usage,.why,.self,.c{color:#555}
+    button{display:none}
+    .verdict{position:static;border:1px solid #ccc}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>AI 交付检查表</h1>
+    <p>发布 / 交付前必过的 6 道关 + 2 条底线 · 全部打钩再发布</p>
+  </header>
+
+  <div class="usage">
+    用法：把 AI 产出的东西（文案 / 图 / 代码 / 方案）逐项过一遍。绿色「底线」不过 → 一律不发布；
+    维度 1、2 必须「是」；其余至少「部分」；自评勾完，底部自动给出发布判定。
+  </div>
+
+  <div class="quick">
+    <span>① 能直接用？</span><span>② 核对事实数据？</span><span>③ 按对象改了？</span>
+    <span>④ 下一步明确？</span><span>⑤ 能重复跑？</span><span>⑥ 沉淀模板了？</span>
+  </div>
+
+  <!-- 1 -->
+  <div class="card">
+    <h2><span class="n">1</span>结果能直接使用吗？</h2>
+    <p class="why">没"能用"的交付=半成品，等于把活儿又甩回给人。</p>
+    <ul>
+      <li><input type="checkbox">打开即可用，不用我再大改格式 / 排版</li>
+      <li><input type="checkbox">关键结论、数据、链接都在正文，没有"待补充"占位</li>
+      <li><input type="checkbox">无半成品痕迹（如 {xxx}、TODO、乱码、截断、"...等"）</li>
+      <li><input type="checkbox">交付格式匹配使用场景（社媒尺寸 / 文档格式 / 可直接运行的代码）</li>
+    </ul>
+    <div class="self">本项自评：
+      <select class="score" data-dim="1"><option value="0">否</option><option value="1">部分</option><option value="2">是</option></select>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <h2><span class="n">2</span>事实和数据核对过吗？</h2>
+    <p class="why">AI 会自信地编。没核实的数字=炸弹，迟早爆在你脸上。</p>
+    <ul>
+      <li><input type="checkbox">关键数字我核对过来源，不是模型随口给的</li>
+      <li><input type="checkbox">有可查证据（链接 / 文件 / 截图），不是孤证</li>
+      <li><input type="checkbox">不确定的地方标注了"待核实"，没有伪装成确定事实</li>
+      <li><input type="checkbox">时间 / 单位 / 口径一致，全文不自相矛盾</li>
+    </ul>
+    <div class="self">本项自评：
+      <select class="score" data-dim="2"><option value="0">否</option><option value="1">部分</option><option value="2">是</option></select>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <h2><span class="n">3</span>针对具体对象改了吗？</h2>
+    <p class="why">通用模板套话谁都会，价值在"为我而生"。</p>
+    <ul>
+      <li><input type="checkbox">是按本次具体对象 / 受众写的，不是通用框架套话</li>
+      <li><input type="checkbox">用到了对象相关的真实背景（行业 / 产品 / 人名 / 数据）</li>
+      <li><input type="checkbox">语气、深度、长度匹配受众（老板 / 客户 / 团队各不同）</li>
+      <li><input type="checkbox">删掉了和本次无关、多余的内容</li>
+    </ul>
+    <div class="self">本项自评：
+      <select class="score" data-dim="3"><option value="0">否</option><option value="1">部分</option><option value="2">是</option></select>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <h2><span class="n">4</span>下一步行动明确吗？</h2>
+    <p class="why">交代完就"你看呢"=没交代完。</p>
+    <ul>
+      <li><input type="checkbox">明确写了"下一步做什么"</li>
+      <li><input type="checkbox">有负责人 / 时间点，或给了选项让我来定</li>
+      <li><input type="checkbox">卡住时有备选方案或求助路径</li>
+      <li><input type="checkbox">没有把决策球又踢回给我</li>
+    </ul>
+    <div class="self">本项自评：
+      <select class="score" data-dim="4"><option value="0">否</option><option value="1">部分</option><option value="2">是</option></select>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card">
+    <h2><span class="n">5</span>能重复执行吗？</h2>
+    <p class="why">一次成功是运气，能复现才是能力。</p>
+    <ul>
+      <li><input type="checkbox">步骤写清了，别人照做能得到一致结果</li>
+      <li><input type="checkbox">依赖的输入 / 工具 / 参数都列明了</li>
+      <li><input type="checkbox">边界和例外情况有说明</li>
+      <li><input type="checkbox">结果不依赖我的"临场发挥"</li>
+    </ul>
+    <div class="self">本项自评：
+      <select class="score" data-dim="5"><option value="0">否</option><option value="1">部分</option><option value="2">是</option></select>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card">
+    <h2><span class="n">6</span>沉淀成模板 / 工作流了吗？</h2>
+    <p class="why">同样的事做第二遍还从零开始=白干。</p>
+    <ul>
+      <li><input type="checkbox">已沉淀为模板 / 提示词 / 脚本 / SOP 之一</li>
+      <li><input type="checkbox">命名和存放位置清晰，下次能找到</li>
+      <li><input type="checkbox">关键变量已参数化，换对象即可复用</li>
+      <li><input type="checkbox">有版本记录，知道改了什么、为什么改</li>
+    </ul>
+    <div class="self">本项自评：
+      <select class="score" data-dim="6"><option value="0">否</option><option value="1">部分</option><option value="2">是</option></select>
+    </div>
+  </div>
+
+  <!-- 底线 -->
+  <div class="card must">
+    <h2><span class="n">!</span>底线（不过 = 一律不发布）</h2>
+    <p class="why">这几条没有"部分通过"，必须全过。</p>
+    <ul>
+      <li><input type="checkbox" class="mustbox">没有把编造的内容当事实（无幻觉冒充真相）</li>
+      <li><input type="checkbox" class="mustbox">没有泄露隐私 / 机密，没有越权对外发言</li>
+      <li><input type="checkbox" class="mustbox">没有违反平台规则 / 法律 / 合规要求</li>
+    </ul>
+  </div>
+
+  <div class="verdict">
+    <div>
+      <div class="v" id="verdict">— 请完成自评 —</div>
+      <div class="c" id="reason"></div>
+    </div>
+    <button onclick="window.print()">打印 / 导出 PDF</button>
+    <button type="button" onclick="resetAll()" style="background:transparent;color:var(--mut);border:1px solid var(--line)">清空进度</button>
+  </div>
+
+  <footer>AI 交付检查表 · 进度自动保存于本机浏览器，关闭再开仍在</footer>
+</div>
+
+<script>
+  function evaluate(){
+    const scores={};
+    document.querySelectorAll('.score').forEach(s=>scores[s.dataset.dim]=+s.value);
+    const musts=[...document.querySelectorAll('.mustbox')].every(b=>b.checked);
+    const v=document.getElementById('verdict');
+    const r=document.getElementById('reason');
+
+    if(!musts){
+      const miss=document.querySelectorAll('.mustbox').length-[...document.querySelectorAll('.mustbox')].filter(b=>b.checked).length;
+      v.textContent='⛔ 暂不可发布'; r.textContent='底线项有 '+miss+' 条未过：编造事实 / 泄密 / 违规 任一出现都禁止发布';
+      return;
+    }
+    const d1=+scores[1], d2=+scores[2];
+    const others=[3,4,5,6].every(d=>scores[d]>=1);
+    if(d1===2 && d2===2 && others){
+      v.textContent='✅ 可以发布'; r.textContent='底线全过 · 维度1、2 均为「是」· 其余≥「部分」。交付达标。';
+    }else{
+      const probs=[];
+      if(d1<2) probs.push('维度1(能直接用)需「是」');
+      if(d2<2) probs.push('维度2(核对事实)需「是」');
+      if(!others) probs.push('维度3-6 需≥「部分」');
+      v.textContent='⛔ 暂不可发布'; r.textContent='还差：'+probs.join('；');
+    }
+  }
+  const STORE_KEY='ai-delivery-checklist-v1';
+  function allBoxes(){return [...document.querySelectorAll('input[type=checkbox]')];}
+  function allScores(){return [...document.querySelectorAll('.score')];}
+  function save(){
+    try{
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        boxes: allBoxes().map(b=>b.checked),
+        scores: allScores().map(s=>s.value)
+      }));
+    }catch(e){}
+  }
+  function restore(){
+    try{
+      const raw=localStorage.getItem(STORE_KEY); if(!raw) return;
+      const st=JSON.parse(raw);
+      const boxes=allBoxes(), scores=allScores();
+      if(Array.isArray(st.boxes)&&st.boxes.length===boxes.length) boxes.forEach((b,i)=>b.checked=!!st.boxes[i]);
+      if(Array.isArray(st.scores)&&st.scores.length===scores.length) scores.forEach((s,i)=>s.value=st.scores[i]);
+    }catch(e){}
+  }
+  function resetAll(){
+    if(!confirm('清空本机保存的勾选进度？')) return;
+    try{localStorage.removeItem(STORE_KEY);}catch(e){}
+    allBoxes().forEach(b=>b.checked=false);
+    allScores().forEach(s=>s.value='0');
+    evaluate();
+  }
+  allBoxes().forEach(b=>b.addEventListener('change',()=>{save();evaluate();}));
+  allScores().forEach(s=>s.addEventListener('change',()=>{save();evaluate();}));
+  restore();
+  evaluate();
+</script>
+</body>
+</html>
